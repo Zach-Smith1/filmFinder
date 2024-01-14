@@ -36,7 +36,7 @@ function App() {
       filtered = movies
       setFilter(movies)
     } else if (genre !== prevGenre) {
-      console.log('genre change, ', filter, movies)
+      console.log('this happened')
       movies.forEach((m) => {
         if (m.genres.includes(genre)) {
           filtered.push(m)

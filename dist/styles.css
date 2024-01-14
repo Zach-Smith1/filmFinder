@@ -112,3 +112,8 @@ h2 {
   max-width: 50vw;
 }
 }
+@media screen and (max-height: 400px) {
+  .poster {
+      max-width: 25vw;
+  }
+  }
