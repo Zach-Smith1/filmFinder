@@ -5,7 +5,6 @@ function App() {
   const [movies, setMovies] = useState(null);
   const [details, setDetails] = useState(null);
   const [genre, setGenre] = useState('All');
-  const [prevGenre, setPrevGenre] = useState('All');
   const [filter, setFilter] = useState(null);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(null);
@@ -15,11 +14,11 @@ function App() {
     const fetchMovies = async () => {
       try {
         const response = await fetch('https://code-challenge.spectrumtoolbox.com/api/movies',
-        {
-          headers: {
-            Authorization: 'Api-Key q3MNxtfep8Gt'
-          },
-      });
+          {
+            headers: {
+              Authorization: 'Api-Key q3MNxtfep8Gt'
+            },
+          });
         const result = await response.json();
         setMovies(result.data);
         setFilter(result.data);
@@ -35,8 +34,7 @@ function App() {
     if (genre === 'All') {
       filtered = movies
       setFilter(movies)
-    } else if (genre !== prevGenre) {
-      console.log('this happened')
+    } else if (genre !== 'All') {
       movies.forEach((m) => {
         if (m.genres.includes(genre)) {
           filtered.push(m)
@@ -54,7 +52,7 @@ function App() {
     }
     setFilter(filterBySearch)
 
-  }, [genre, prevGenre, search]);
+  }, [genre, search]);
 
   const closeModal = () => {
     setModalOpen(false)
@@ -72,11 +70,11 @@ function App() {
   const fetchDetails = async (id) => {
     try {
       const response = await fetch(`https://code-challenge.spectrumtoolbox.com/api/movies/${id}`,
-      {
-        headers: {
-          Authorization: 'Api-Key q3MNxtfep8Gt'
-        },
-      });
+        {
+          headers: {
+            Authorization: 'Api-Key q3MNxtfep8Gt'
+          },
+        });
       const result = await response.json();
       setDetails(result.data);
       openModal()
@@ -111,33 +109,33 @@ function App() {
     let topCast = [];
     details.topCast.forEach((a) => {
       if (a.characterName) { // accounts for missing character names at end of each cast array
-      topCast.push(
-      <div key={a.name}>
-        <span>{a.name} as {a.characterName}</span>
-          <br/>
-        </div>)
+        topCast.push(
+          <div key={a.name}>
+            <span>{a.name} as {a.characterName}</span>
+            <br />
+          </div>)
       }
     })
     movieDetails =
-    <div className='details'>
-      <h2>{details.title}</h2>
-      <span>{details.description}</span><br/>
-      <br/><span><strong>Duration:</strong> {details.duration/60} min</span><br/>
-      <span><strong>Release Year:</strong> {details.releaseYear}</span><br/>
-      <span><strong>Genre(s):</strong> {details.genres.join(', ')}</span><br/>
-      <br/><><strong>Top Cast:</strong><br/>{topCast}</>
-      {moods}
-    </div>
+      <div className='details'>
+        <h2>{details.title}</h2>
+        <span>{details.description}</span><br />
+        <br /><span><strong>Duration:</strong> {details.duration / 60} min</span><br />
+        <span><strong>Release Year:</strong> {details.releaseYear}</span><br />
+        <span><strong>Genre(s):</strong> {details.genres.join(', ')}</span><br />
+        <br /><><strong>Top Cast:</strong><br />{topCast}</>
+        {moods}
+      </div>
   }
 
   return (
     <div className='Page'>
-      <h1>Film Finder</h1><br/>
+      <h1>Film Finder</h1><br />
       <span className='filters'>
         <div>Filter by Genre:&emsp;
           <select onChange={change(setGenre)}>{genreWheel}</select>
         </div>
-        <input onChange={change(setSearch)} className='searchInput' name='name' type='text' placeholder='Search by Title'/>
+        <input onChange={change(setSearch)} className='searchInput' name='name' type='text' placeholder='Search by Title' />
       </span>
       {(filter && filter.length > 0) ? (
         <div className='allMovies'>
@@ -155,7 +153,7 @@ function App() {
           ))}
         </div>
       ) : <p className='noMovies'>Sorry, no matches found</p>}
-    <Modal isOpen={isModalOpen} closeModal={closeModal}>
+      <Modal isOpen={isModalOpen} closeModal={closeModal}>
         {movieDetails}
       </Modal>
     </div>
