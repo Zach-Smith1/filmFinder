@@ -22,7 +22,6 @@ function App() {
         const result = await response.json();
         setMovies(result.data);
         setFilter(result.data);
-        console.log(result.data)
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -54,15 +53,15 @@ function App() {
 
   }, [genre, search]);
 
-  const closeModal = () => {
-    setModalOpen(false)
+  const switchModal = () => {
+    if (isModalOpen) {
+      setModalOpen(false)
+    } else {
+      setModalOpen(true)
+    }
   }
 
-  const openModal = () => {
-    setModalOpen(true)
-  }
-
-  const change = (setState) => (e) => {
+  const changeVal = (setState) => (e) => {
     let val = e.target.value;
     setState(val)
   }
@@ -77,7 +76,7 @@ function App() {
         });
       const result = await response.json();
       setDetails(result.data);
-      openModal()
+      switchModal()
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -108,7 +107,7 @@ function App() {
     if (details.moods.length > 0) moods = <span><strong>Moods:</strong> {details.moods.join(', ')}</span>
     let topCast = [];
     details.topCast.forEach((a) => {
-      if (a.characterName) { // accounts for missing character names at end of each cast array
+      if (a.characterName) { // accounts for missing character names at end of each Top Cast array
         topCast.push(
           <div key={a.name}>
             <span>{a.name} as {a.characterName}</span>
@@ -133,9 +132,9 @@ function App() {
       <h1>Film Finder</h1><br />
       <span className='filters'>
         <div>Filter by Genre:&emsp;
-          <select onChange={change(setGenre)}>{genreWheel}</select>
+          <select onChange={changeVal(setGenre)}>{genreWheel}</select>
         </div>
-        <input onChange={change(setSearch)} className='searchInput' name='name' type='text' placeholder='Search by Title' />
+        <input onChange={changeVal(setSearch)} className='searchInput' name='name' type='text' placeholder='Search by Title' />
       </span>
       {(filter && filter.length > 0) ? (
         <div className='allMovies'>
@@ -145,6 +144,7 @@ function App() {
                 src={`../public/moviePosterImages/${mov.id}.jpeg`}
                 alt={mov.title}
                 onError={(e) => {
+                  console.log(`No image found for ${mov.title}, default image used`)
                   e.target.src = '../public/moviePosterImages/defaultImage.jpeg';
                 }}
               />
@@ -153,7 +153,7 @@ function App() {
           ))}
         </div>
       ) : <p className='noMovies'>Sorry, no matches found</p>}
-      <Modal isOpen={isModalOpen} closeModal={closeModal}>
+      <Modal isOpen={isModalOpen} closeModal={switchModal}>
         {movieDetails}
       </Modal>
     </div>
