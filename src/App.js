@@ -144,10 +144,10 @@ function App() {
           {filter.map((mov) => (
             <div className='movieBox' key={mov.id} onClick={() => fetchDetails(mov.id)}>
               <img className='poster'
-                src={`../dist/moviePosterImages/${mov.id}.jpeg`}
+                src={`../public/moviePosterImages/${mov.id}.jpeg`}
                 alt={mov.title}
                 onError={(e) => {
-                  e.target.src = '../dist/moviePosterImages/defaultImage.jpeg';
+                  e.target.src = '../public/moviePosterImages/defaultImage.jpeg';
                 }}
               />
               <span>{mov.title}</span>
